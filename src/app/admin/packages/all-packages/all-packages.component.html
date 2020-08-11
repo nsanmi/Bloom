@@ -1,0 +1,117 @@
+<div class="intro mb-4 row">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Pacakges</p>
+        <p class="f-24 mb-0">{{params.title | titlecase}} Packages</p>
+    </div>
+    <div class="tags col-md-6">
+        <div>
+          <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'all' && error == false}"
+            (click)="filterPackages('all')">All
+          </span>
+          <span class="tag mx-0 mx-md-3" 
+            [ngClass]="{'activeTag': params.title == 'active' && error == false}"
+            (click)="filterPackages('active')">Active
+          </span>
+          <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'inactive' && error == false}"
+            (click)="filterPackages('inactive')">Inactive
+          </span>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="mb-3 d-flex">
+    <a class="btn bg-app-primary d-flex align-items-center
+     text-white f-12 c_p" (click)="newPackage()">
+        <mat-icon class="mr-2">library_add</mat-icon>
+        <span>Create Package</span> 
+    </a>
+</div> -->
+
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
+<div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
+    {{params.title | titlecase}} Package list is empty 
+    <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+</div>
+<div class="example-container mat-elevation-z8 mb-5" >
+    <mat-table [dataSource]="dataSource" matSort>
+        <!-- index column -->
+        <ng-container matColumnDef="index">
+            <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+            <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Title</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="title">
+               <span class=" text-app-primary name c_p">{{row?.title}}</span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="price">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                 <span>Price</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="price">
+                ₦{{row?.price}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="discount">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                ₦<span>Discount</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Discount">
+                ₦{{row?.discount}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+            <span>Duration</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label=">Duration">
+                {{row?.duration}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Status</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Status">
+               <span [ngClass]="{
+                'verified':row?.status == 1, 
+                'pending': row?.status == 0
+                }">
+                   <mat-icon>check_circle_outline</mat-icon>
+                   {{row?.status == 1?'Active':'Inactive'}}
+               </span> 
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <i class="fas fa-ellipsis-h"></i>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label=">Action">
+                <mat-icon class="text-app-primary c_p mr-3"
+                    matTooltipClass="tooltip-class"
+                    matTooltip="Edit Package"
+                    (click)="editPackage(row)">
+                    edit
+                </mat-icon>
+                <mat-icon class="text-app-danger c_p"
+                    matTooltipClass="tooltip-red"
+                    matTooltip="Delete Package"
+                    (click)="delete(row)">
+                    delete_forever
+                </mat-icon>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+    </mat-table>
+    <div style="position: relative">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+    </div>
+
+</div>

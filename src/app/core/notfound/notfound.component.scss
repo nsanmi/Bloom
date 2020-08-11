@@ -1,0 +1,27 @@
+.container{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5vh 5%;
+    text-align: center;
+    h6{
+        font-size: 100px;
+    }
+    h5{
+        color: #000000;
+        font-weight: 600;
+        font-size: 45px;
+    }
+    p{
+        color: #505050;
+        font-size: 28px;
+    }
+    a.btn{
+        border-radius: 15px;
+        padding: .5rem 1rem;
+        color: #fff !important;
+        text-align: center;
+        cursor: pointer;
+    }
+}

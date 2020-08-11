@@ -1,0 +1,99 @@
+<mat-toolbar  class="mat-elevation-z6 mat_nav nav" id="topbar">
+    <div class="d-flex justify-content-between w-100">
+        <div  class="nav-item">
+            <mat-icon  (click)="opened = !opened">menu</mat-icon>
+            <a class="logo-text ml-3">
+                <img class="logo" src="../../../assets/images/bloom-logo.png" alt="" 
+                [routerLink]="['/']" routerLinkActive="router-link-active" >
+            </a>
+        </div>
+        <ul class="nav ml-auto" >
+            <li class="nav-item user">
+                <div>
+                    <img class="avatar rounded-circle" [src]="user?.photo"
+                     onerror="this.src='../../../assets/img/default.png'"
+                    alt="">
+                    <span class="ml-2 name">{{user?.name || 'Admin'}}</span>
+                </div>
+                <button mat-button [matMenuTriggerFor]="menu" class="outline: none">
+                    <mat-icon class="text-boro-grey" class="outline: none">expand_more</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item class="d-none"></button>
+                    <button mat-menu-item >Pofile</button>
+                    <button mat-menu-item (click)="logout()">Logout</button>
+                </mat-menu>
+            </li>
+        </ul>
+    </div>
+  </mat-toolbar>
+  <!-- <mat-progress-bar mode="query" style="padding: 3px;"></mat-progress-bar> -->
+  <mat-sidenav-container class="main-sidenav-container" (backdropClick)="opened = !opened" >
+    <mat-sidenav [mode]="mode"
+            [opened]="opened"
+            [fixedInViewport]="fixedInViewport"
+            [fixedTopGap]="layoutGap">
+            <mat-nav-list id="sidebar">
+                <div class="text-center side-avatar">
+                    <img class="avatar rounded-circle" [src]="user?.photo"
+                     onerror="this.src='../../../assets/img/default.png'"
+                    alt=""> <br>
+                    <span class="f-14">{{user?.name || 'Admin'}}</span>
+                </div>
+                <div *ngIf="changeMenu == false">
+                    <a class="links" mat-list-item *ngFor="let item of adminMenu" 
+                        [routerLink]="[item.path]" routerLinkActive="active_link" >
+                        <mat-icon class="icon">{{item.icon}}</mat-icon>
+                        <span class="ml-2">{{item.title}}</span>
+                    </a>
+                </div>
+                <div *ngIf="changeMenu == true">
+                    <a class="links" mat-list-item *ngFor="let item of adminMenu" 
+                        [routerLink]="[item.path]" routerLinkActive="active_link" (click)="opened = !opened">
+                        <mat-icon class="icon">{{item.icon}}</mat-icon>
+                        <span class="ml-2">{{item.title}}</span>
+                    </a>
+                </div>
+            </mat-nav-list>
+    </mat-sidenav>
+    
+    <div class="outlet">
+        <router-outlet ></router-outlet>
+    </div> 
+    
+  </mat-sidenav-container>
+<div class="noty">
+    <div class="content">
+        <h6 class="text-center head f-w6 f-16 mb-3">Instructions</h6>
+        <div>
+            <h6 class="text-app-primary f-14 f-w6">User Verification Steps</h6>
+            <ul class="list-unstyled">
+                <li>Verify Profile picture</li>
+                <li>Verify the drivers license</li>
+                <li>Verify Vehicle documents</li>
+                <li>Finish verification by clicking verify user button</li>
+                <span class="f-w6">NB: 2 and 3 only applies to titans (Drivers)</span>
+            </ul>
+        </div>
+        <div>
+            <h6 class="text-app-primary f-14">Licence & Vehicle Verification</h6>
+            <ul class="list-unstyled">
+                <li>Make sure the documents are issued from the correct licensing body</li>
+                <li>Make sure the documents are valid by issue and expiry date</li>
+                <li>Make sure drivers image appears on the documents where passport photograph applies</li>
+                <span class="f-w6">NB: This applies only to titans (Drivers)</span>
+            </ul>
+        </div>
+        <div>
+            <h6 class="text-app-primary f-14">Profile Picture Verification</h6>
+            <ul class="list-unstyled">
+                <li>Make sure the image is clear enough to show the user's face</li>
+                <li>Make sure the the image matches the same face on the driver's license and vehicle documents</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="noty_btn bg-app-primary" id="slider-button">
+    <!-- <i class="fas fa-plus"></i> -->
+    <i class="fas fa-cog fa-spin"></i>
+</div>

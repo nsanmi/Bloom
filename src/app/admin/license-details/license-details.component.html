@@ -1,0 +1,17 @@
+<mat-dialog-content class="py-2 px-4">
+    <h6 class="head-text mb-3">Driver's License Details
+        <i class="fas fa-times float-right" (click)="close()"></i>
+    </h6>
+    <hr>
+    <div class="buttons mb-3 text-center">
+        <button class="btn bg-app-green" (click)="confirm()">Verify
+            <i class="fas fa-spinner fa-spin ml-5" *ngIf="loaderVerify"></i>
+        </button>
+        <button class="btn bg-app-danger ml-3" (click)="decline()">Reject
+            <i class="fas fa-spinner fa-spin ml-5" *ngIf="loaderDecline"></i>
+        </button>
+    </div>
+    <div class="card bg-app-outlet p-4">
+        <img [src]="dialogData?.driver_license" alt="Vehcile Report" class="img-fluid">
+    </div>
+</mat-dialog-content>

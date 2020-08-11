@@ -1,0 +1,130 @@
+<div class="intro row mb-4">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Vehicle</p>
+        <p class="f-24 mb-0">Details</p>
+    </div>
+    <div class="buttons col-md-6 d-flex">
+        <button class="btn bg-app-primary mr-3"
+        (click)="update()">
+            <mat-icon>create</mat-icon>
+            Update
+        </button>
+        <button class="btn bg-app-black mr-3" 
+        (click)="reject()"
+        *ngIf="vehicle?.status !== 0">
+            <mat-icon>create</mat-icon>
+            Reject
+        </button>
+        <button class="btn bg-app-green" (click)="verify()"
+        *ngIf="vehicle?.status == 0">
+            <mat-icon>verified_user</mat-icon>
+            Verify
+        </button>
+    </div>
+</div>
+
+<mat-progress-bar mode="query" color="warn" *ngIf="dataLoader"></mat-progress-bar>
+<section class="bg-app-light details mb-5">
+    <h6 class="mb-4 head-text">Basic Information</h6>
+    <div class="row mx-0 align-items-center">
+        <div class="col-md-5 avatar">
+            <mat-icon class="taxi_img">local_taxi</mat-icon>
+            <mat-icon class="status_badge"
+            matTooltipClass="tooltip-class" 
+            matTooltip="{{vehicle?.status == 0?'Vehicle is Unverified':'Vehicle is verified'}}"
+            [ngClass]="{
+                'badge-verified':vehicle?.status == 1, 
+                'badge-pending': vehicle?.status == 0,
+                'badge-rejected': vehicle?.status == 2
+                }">
+                verified
+            </mat-icon>
+        </div>
+        <div class="content col-md-7">
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Maker</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.maker | titlecase}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Model</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.model | titlecase}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Year</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.year}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Color</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.color | titlecase}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Seats</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.seat}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-5 mr-4 f-w6 f-14">Plate Number</h6>
+                <h6 class="text-app-grey f-14">{{vehicle?.plate_number}}</h6>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<section>
+    <h6 class="mb-1 head-text">Vehicle Documents</h6>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
+        role="tab" aria-controls="home" aria-selected="true">Insurance</a>
+        </li>
+        <li class="nav-item" role="presentation">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
+        role="tab" aria-controls="profile" aria-selected="false">Report</a>
+        </li>
+        <li class="nav-item" role="presentation">
+        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages"
+        role="tab" aria-controls="messages" aria-selected="false">Road Worthiness</a>
+        </li>
+
+    </ul>
+  
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="card bg-app-light p-5">
+                <div *ngIf="!vehicle?.insurance.includes('.pdf')">
+                    <img [src]="vehicle?.insurance" alt="Vehicle Insurance" class="img-fluid">
+                </div>
+                <div class="py-5 text-center" *ngIf="vehicle?.insurance.includes('.pdf')">
+                    <a [href]="vehicle?.insurance" target="_blank" class="btn bg-app-primary">
+                        Click to vview pdf file
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="card bg-app-light p-5">
+                <div *ngIf="!vehicle?.report.includes('.pdf')">
+                    <img [src]="vehicle?.report" alt="Vehcile Report" class="img-fluid">
+                </div>
+                <div class="py-5 text-center" *ngIf="vehicle?.report.includes('.pdf')">
+                    <a [href]="vehicle?.report" target="_blank" class="btn bg-app-primary">
+                        Click to vview pdf file
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+            <div class="card bg-app-light p-5">
+                <div *ngIf="!vehicle?.road_worthiness.includes('.pdf')">
+                    <img [src]="vehicle?.road_worthiness" alt="Vehicle Road Worthiness certificate" class="img-fluid">
+                </div>
+                <div class="py-5 text-center" *ngIf="vehicle?.road_worthiness.includes('.pdf')">
+                    <a [href]="vehicle?.road_worthiness" target="_blank" class="btn bg-app-primary">
+                        Click to vview pdf file
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

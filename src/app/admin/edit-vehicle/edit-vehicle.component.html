@@ -1,0 +1,34 @@
+<h6 class="head-text">Edit Driver's Vehicle
+    <i class="fas fa-times float-right" (click)="close()"></i>
+</h6>
+<mat-dialog-content>
+    <form  class="row px-5 py-2 card" #myForm="ngForm">
+        <div class="row">
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.maker" name="maker" placeholder="Maker" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.model" name="model" placeholder="Model" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.year" name="year" placeholder="year" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.color" name="color" placeholder="color" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.seat" name="seat" placeholder="Number of Seats" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.plate_number" name="seanumbt" placeholder="Plate Number" >
+        </mat-form-field>
+        </div>
+        <div class="text-center">
+            <button class="btn bg-app-primary" [ngClass]="{'ban': loader == true}"
+                [disabled]="loader == true" (click)="submit()">
+                Save Changes
+                <i class="fas fa-spinner fa-spin ml-3" *ngIf="loader"></i>
+            </button>
+        </div>
+    </form>
+</mat-dialog-content>

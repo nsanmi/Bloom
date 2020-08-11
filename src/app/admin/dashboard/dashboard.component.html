@@ -1,0 +1,84 @@
+<div class="intro mb-4">
+    <div class="">
+        <p class="f-14 mb-0">Dashboard </p>
+        <p class="f-34 mb-0">Overview</p>
+    </div>
+</div>
+<div class="summary row mx-0 mb-5">
+    <div class="col-md-3">
+        <div class="card-summary card mx-0">
+            <div class="row">
+                <h6 class="col-7 f-14">Titans</h6>
+                <h6 class="col-5 f-w6 f-24">
+                    <span>{{userCount?.total_titans}}</span> 
+                </h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Verified</h6>
+                <h6 class="col-5 f-w6 f-16">{{userCount?.verified_titans}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Unverified</h6>
+                <h6 class="col-5 f-w6 f-16">0</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-summary card mx-0">
+            <div class="row">
+                <h6 class="col-7 f-14">Ryders</h6>
+                <h6 class="col-5 f-w6 f-24">{{userCount?.total_ryder}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Active</h6>
+                <h6 class="col-5 f-w6 f-16">0</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Deactivated</h6>
+                <h6 class="col-5 f-w6 f-16">10</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-summary card mx-0">
+            <div class="row">
+                <h6 class="col-7 f-14">Subscriptions</h6>
+                <h6 class="col-5 f-w6 f-24">{{subCount?.total_subscription}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Pending</h6>
+                <h6 class="col-5 f-w6 f-16">{{subCount?.inactive_subscription}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Verified</h6>
+                <h6 class="col-5 f-w6 f-16">{{subCount?.active_subscription}}</h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-summary card mx-0">
+            <div class="row">
+                <h6 class="col-7 f-14">Vehicles</h6>
+                <h6 class="col-5 f-w6 f-24">{{vehicleCount?.total_vehicle}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Pending</h6>
+                <h6 class="col-5 f-w6 f-16">{{vehicleCount?.pending_vehicle}}</h6>
+            </div>
+            <div class="row">
+                <h6 class="col-7 f-12">Verified</h6>
+                <h6 class="col-5 f-w6 f-16">{{vehicleCount?.verified_vehicle}}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="chart bg-app-light">
+    <h6 class="mb-3 text-app-dark f-16 f-w6">User Registration Report</h6>
+    <canvas baseChart
+        [datasets]="reports.chartData"
+        [labels]="reports.chartLabels"
+        [options]="chartOptions"
+        [legend]="reports.chartLegend"
+        [chartType]="reports.chartType">
+    </canvas>
+</div>   

@@ -1,0 +1,120 @@
+<div class="intro mb-4 row">
+    <div class="col-md-6 mb-3">
+        <p class="f-14 mb-0">Dashboard - Vehicles</p>
+        <p class="f-24 mb-0">{{params?.title | titlecase}} Vehicles</p>
+    </div>
+    <div class="tags col-md-6">
+        <div>
+          <span class="tag mr-2" *ngFor="let item of statusFilters"
+            [ngClass]="{'activeTag': params.title == item.title && error == false}"
+            (click)="filterVehicle(item)">{{item?.title}}
+          </span>
+        </div>
+    </div>
+</div>
+
+<div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
+    No record found for {{params?.title | titlecase}} Vehicles<br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+ </div>
+
+<div class="form-group mb-3">
+    <input type="text" class="form-control search"
+    name="search" [(ngModel)]="searchterm"
+    (keyup)="searchName()"
+     placeholder="search by name or plate number">
+     <i class="fas fa-redo-alt reload text-app-primary f-18" (click)="reset()"></i>
+</div>
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
+
+<div class="example-container mat-elevation-z8 mb-5" >
+    <mat-table [dataSource]="dataSource" matSort>
+        <!-- index column -->
+        <ng-container matColumnDef="index">
+        <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="maker">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Maker</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Maker">
+               <span class=" text-app-primary name c_p"
+               matTooltipClass="tooltip-class" 
+               matTooltip="View Vehicle Details"
+               (click)="setVehicle(row)"
+               [routerLink]="['/admin/vehicles', row?.id]">
+               {{row?.maker | titlecase}}
+                </span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="model">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Driver</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Driver">
+               <span class="">{{row?.driver_name | titlecase}}</span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="year">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Year</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Year">
+                {{row?.year}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="color">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                 <span>Color</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Color">
+                {{row?.color | titlecase}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="seat">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+            <span>Plate Number</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Plate Number">
+                {{row?.plate_number}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                 <span>Status</span>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Status">
+               <span [ngClass]="{
+                'verified':row?.status == 1, 
+                'pending': row?.status == 2,
+                'rejected': row?.status == 3
+                }">
+                   <mat-icon>check_circle_outline</mat-icon>
+                   <span *ngIf="row?.status == 1">Active</span>
+                   <span *ngIf="row?.status == 2">Pending</span>
+                   <span *ngIf="row?.status == 3">Rejected</span>
+               </span> 
+            </mat-cell>
+        </ng-container>
+        
+        <!-- action Column -->
+        <!-- <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef><i class="fas fa-ellipsis-h"></i></mat-header-cell>
+            <mat-cell  *matCellDef="let row"  data-label="action">
+                <mat-icon class="text-app-primary c_p"
+                matTooltipClass="tooltip-class" 
+                matTooltip="View Driver Details"
+                [routerLink]="['/admin/users', row?.driver_id]"
+                 >launch</mat-icon>
+            </mat-cell>
+        </ng-container> -->
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+    </mat-table>
+    <div style="position: relative">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+    </div>
+
+</div>

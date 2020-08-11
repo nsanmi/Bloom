@@ -1,0 +1,30 @@
+<mat-dialog-content class="py-2 px-4">
+    <div class="mb-3 head">
+        <span class="head-text "> User Profile Picture</span>
+        <div class="buttons">
+        <button class="btn bg-app-green mr-2" (click)="confirm()">Verify
+            <i class="fas fa-spinner fa-spin ml-5" *ngIf="loaderVerify"></i>
+        </button>
+        <button class="btn bg-app-danger" (click)="decline()">Reject
+            <i class="fas fa-spinner fa-spin ml-5" *ngIf="loaderDecline"></i>
+        </button>
+        <i class="fas fa-times ml-4 fa-2x" (click)="close()"></i>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-app-outlet p-4 ">
+                <h6 class="text-app-primary text-center f-12">New Image</h6> <br>
+                <img [src]="dialogData?.update_avatar" alt="Updated Profile Picture" class="img-fluid">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-app-outlet p-4 ">
+                <h6 class="text-app-primary text-center f-12">Current Image</h6> <br>
+                <img [src]="dialogData?.avatar" alt="Profile Picture" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+</mat-dialog-content>

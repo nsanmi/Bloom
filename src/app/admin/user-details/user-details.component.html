@@ -1,0 +1,298 @@
+<div class="intro row mb-4">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Users</p>
+        <p class="f-24 mb-0">Details</p>
+    </div>
+    <div class="buttons col-md-6 d-flex">
+        <button class="btn bg-app-green ml-2" 
+        *ngIf="user?.verification_status == 'Pending' 
+        || user?.verification_status == 'Rejected'"
+        (click)="verifyUser()">
+            <mat-icon>check_circle_outline</mat-icon>
+            Verify User
+        </button>
+        <button class="btn bg-app-black ml-2" 
+        (click)="decativateUser()"
+        *ngIf="user?.verification_status == 'Verified' ">
+            <mat-icon>remove_circle_outline</mat-icon>
+            Deactivate
+        </button>
+        <button class="btn bg-app-danger ml-2" 
+        (click)="deleteUser()">
+            <mat-icon>delete_forever</mat-icon>
+            Delete
+        </button>
+        <button class="btn bg-app-green ml-2"
+        *ngIf="user?.avatar_status == 1"
+        (click)="verifyImage()">
+            <mat-icon>check_circle_outline</mat-icon>
+            Verify Image
+        </button>
+        <button class="btn bg-app-primary ml-2" 
+        (click)="message()">
+            <mat-icon>sms</mat-icon>
+            Message
+        </button>
+        <button class="btn bg-app-danger ml-3" 
+        (click)="revokeAdminAccess()"
+        *ngIf="user?.role == 2 && role == 3">
+            <mat-icon>remove_circle_outline</mat-icon>
+            Revoke Admin
+        </button>
+        <button class="btn bg-app-green ml-2" (click)="grantAdminAccess()"
+        *ngIf="user?.role == 1 && role == 3">
+            <mat-icon>admin_panel_settings</mat-icon>
+            Grant Admin
+        </button>
+    </div>
+</div>
+
+<mat-progress-bar mode="query" color="warn" *ngIf="dataLoader"></mat-progress-bar>
+<section class="bg-app-light details mb-5">
+    <h6 class="mb-4 head-text">Basic Information</h6>
+    <div class="row mx-0 align-items-center">
+        <div class="col-md-5 avatar">
+            <mat-icon class="user_img" *ngIf="!user?.avatar">face</mat-icon>
+            <img [src]="user?.avatar" alt="" class="user_img" *ngIf="user?.avatar">
+            <mat-icon class="status_badge"
+            matTooltipClass="tooltip-class"
+            [ngClass]="{
+                'badge-verified':user?.avatar_status == 2, 
+                'badge-pending': user?.avatar_status == 1
+                }">
+                verified
+            </mat-icon>
+        </div>
+        <div class="content col-md-7">
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-3 mr-4 f-w6 f-14">Name</h6>
+                <h6 class="text-app-grey f-14">{{user?.name | titlecase}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-3 mr-4 f-w6 f-14">Usertype</h6>
+                <h6 class="text-app-grey f-14" *ngIf="user?.role == 1 && user?.can_drive == false">
+                    Ryder (Basic User)
+                </h6>
+                <h6 class="text-app-grey f-14" *ngIf="user?.role == 1 && user?.can_drive == true">
+                    Titan (Driver)
+                </h6>
+                <h6 class="text-app-grey f-14" *ngIf="user?.role == 2">Admin</h6>
+                <h6 class="text-app-grey f-14" *ngIf="user?.role == 3">Super Admin</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-3 mr-4 f-w6 f-14">Phone</h6>
+                <h6 class="text-app-grey f-14">{{user?.phone}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-3 mr-4 f-w6 f-14">Email</h6>
+                <h6 class="text-app-grey f-14">{{user?.email}}</h6>
+            </div>
+            <div class="text row mb-2">
+                <h6 class="text-app-black col-3 mr-4 f-w6 f-14">Status</h6>
+                <h6 class="text-app-grey f-14">
+                    <span [ngClass]="{
+                        'verified':user?.verification_status == 'Verified', 
+                        'pending': user?.verification_status == 'Pending',
+                        'rejected': user?.verification_status == 'Rejected'
+                        }">
+                           <mat-icon>verified</mat-icon>
+                           {{user?.verification_status}}
+                    </span> 
+                </h6>
+            </div>
+            <div class="text row mb-2">
+                <ngx-star-rating [(ngModel)]="rating" [id]="'rating'" ngDefaultControl [disabled]="disabled"></ngx-star-rating>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h6 class="mb-1 head-text">Other Information</h6>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home"
+        role="tab" aria-controls="home" aria-selected="true">Trusted Contact</a>
+        </li>
+        <li class="nav-item" role="presentation">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
+        role="tab" aria-controls="profile" aria-selected="false">Trips</a>
+        </li>
+        <li class="nav-item" role="presentation">
+        <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages"
+        *ngIf="user?.role == 1 && user?.can_drive == true"
+        role="tab" aria-controls="messages" aria-selected="false">Default Vehicle</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="sub-tab" data-toggle="tab" href="#sub"
+            *ngIf="user?.role == 1 && user?.can_drive == true"
+            role="tab" aria-controls="sub" aria-selected="false">Subscriptions</a>
+        </li>
+
+    </ul>
+  
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="card bg-app-light p-5">
+                <div class="d-flex contact">
+                    <span>Name</span>
+                    <h6>{{user?.contact?.name}}</h6>
+                </div>
+                <div class="d-flex contact">
+                    <span>Note</span>
+                    <h6>{{user?.contact?.note}}</h6>
+                    </div>
+                <div class="d-flex contact">
+                    <span>Phone</span>
+                    <h6>{{user?.contact?.phone}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="card bg-app-light p-5">
+                <div class="trip">
+                    <div class="trip-title">
+                        <div *ngIf="user?.role == 1 && user?.can_drive == false">
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'intra'}"
+                            (click)="activeTrip = 'intra';toggleTrip(user?.active_Intra_Trip)">Active Intra Trip</h6>
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'charter'}"
+                            (click)="activeTrip = 'charter';toggleTrip(user?.active_Charter_Trip)">Active Charter Trip</h6>
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'inter'}"
+                            (click)="activeTrip = 'inter';toggleTrip(user?.active_Inter_Trip)">Active Inter Trip</h6>
+                        </div>
+                        <div *ngIf="user?.role == 1 && user?.can_drive == true">
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'driver-intra'}"
+                            (click)="activeTrip = 'driver-intra';toggleTrip(user?.active_Driver_Intra_Trip)">Active Driver Intra Trip</h6>
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'driver-charter'}"
+                            (click)="activeTrip = 'driver-charter';toggleTrip(user?.active_Driver_Charter_Trip)">Active Driver Charter Trip</h6>
+                            <h6 [ngClass]="{'activeTrip': activeTrip == 'driver-inter'}"
+                            (click)="activeTrip = 'driver-inter';toggleTrip(user?.active_Driver_Inter_Trip)">Active Driver Inter Trip</h6>               
+                        </div>
+                    </div>
+                    <div class="trip-details">
+                        <mat-form-field class="item-lg">
+                            <mat-label>Destination</mat-label>
+                            <input matInput placeholder="Destination" [value]="trip?.destination" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="item-lg">
+                            <mat-label>From</mat-label>
+                            <input matInput placeholder="from" [value]="trip?.from" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="item">
+                            <mat-label>Price</mat-label>
+                            <input matInput placeholder="Destination" [value]="trip?.price" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="item">
+                            <mat-label>Date</mat-label>
+                            <input matInput placeholder="from" [value]="trip?.date" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="item">
+                            <mat-label>Time</mat-label>
+                            <input matInput placeholder="from" [value]="trip?.time" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="item">
+                            <mat-label>Trip Status</mat-label>
+                            <input matInput placeholder="from" [value]="trip?.trip_status" readonly>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="messages" role="tabpanel" 
+        aria-labelledby="messages-tab" *ngIf="user?.role == 1 && user?.can_drive == true">
+            <div class="card bg-app-light p-5">
+                <div class="d-flex vehicle">
+                    <span>Make</span>
+                    <h6>{{user?.default_vehicle?.maker | titlecase}}</h6>
+                </div>
+                <div class="d-flex vehicle">
+                    <span>Model</span>
+                    <h6>{{user?.default_vehicle?.model | titlecase}}</h6>
+                </div>
+                <div class="d-flex vehicle">
+                    <span>Year</span>
+                    <h6>{{user?.default_vehicle?.year}}</h6>
+                </div>
+                <div class="d-flex vehicle">
+                    <span>Color</span>
+                    <h6>{{user?.default_vehicle?.color | titlecase}}</h6>
+                </div>
+                <div class="d-flex vehicle">
+                    <span>Seat</span>
+                    <h6>{{user?.default_vehicle?.seat}}</h6>
+                </div>
+                <div class="d-flex vehicle">
+                    <span>Plate Number</span>
+                    <h6>{{user?.default_vehicle?.plate_number}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="sub" role="tabpanel" 
+        aria-labelledby="sub-tab" *ngIf="user?.role == 1 && user?.can_drive == true">
+        <mat-table [dataSource]="dataSource" matSort>
+            <!-- index column -->
+            <ng-container matColumnDef="index">
+            <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+            <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+1}}</mat-cell>
+            </ng-container>
+            <!-- name Column -->
+            <ng-container matColumnDef="package">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Package</span>
+                    </mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label="Package">
+                   <span class=" text-app-primary name c_p">{{row?.package}}</span>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Amount</span></mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label="Amount">
+                    {{row?.price_paid}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="payment">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>
+                     <span>Mode of Payment</span>
+                    </mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label="Mode of Payment">
+                    {{row?.mode_of_payment}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="created_at">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Created At</span></mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label=">Expires At">
+                    {{row?.created_at | date:'fullDate'}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="expires_at">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Expires At</span></mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label=">Expires At">
+                    {{row?.expires_at}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="is_active">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Status</span></mat-header-cell>
+                <mat-cell *matCellDef="let row" data-label="Status">
+                   <span [ngClass]="{
+                    'verified':row?.is_active == true, 
+                    'pending': row?.is_active == false
+                    }">
+                       <mat-icon>check_circle_outline</mat-icon>
+                       {{row?.is_active == true?'Active':'Inactive'}}
+                   </span> 
+                </mat-cell>
+            </ng-container>
+            
+            <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;">
+            </mat-row>
+    
+        </mat-table>
+        <div style="position: relative">
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+        </div>
+        </div>
+    </div>
+</section>

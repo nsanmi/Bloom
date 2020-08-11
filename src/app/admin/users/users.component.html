@@ -1,0 +1,123 @@
+<div class="intro mb-4">
+    <div class="">
+        <p class="f-14 mb-0">Dashboard - Users</p>
+        <p class="f-24 mb-0">{{profile == params.title?'':activeStatus | titlecase}} {{params.title | titlecase}}</p>
+    </div>
+</div>
+<div class="intro mb-4 d-flex justify-content-between filter">
+    <div class="tags">
+        <div>
+          <span class="tag mr-3" *ngFor="let item of roleFilters"
+            [ngClass]="{'activeTag': item?.title == params.title && error == false}"
+            (click)="params = item;filterRole()">{{item?.title | titlecase}}
+          </span>
+          <span class="tag mr-3"
+          [ngClass]="{'activeTag': profile == params.title && error == false}"
+          (click)="profileChange()">Updated Profile Image 
+            <span class="badge bg-app-primary text-white ml-2">{{count}}</span>
+          </span>
+        </div>
+    </div>
+    <div>
+        <div class="d-flex align-items-center">
+          <span class="mr-1 f-12 text-app-dark">{{activeStatus == ''?'All':activeStatus | titlecase}}</span>
+          <span mat-button [matMenuTriggerFor]="menu" class="menu-btn f-12">
+            <mat-icon class="text-boro-grey" class="outline: none">expand_more</mat-icon>
+          </span>
+        </div>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item class="d-none"></button>
+          <button mat-menu-item *ngFor="let item of statusFilters"
+                  (click)="activeStatus = item?.title; filterRole()">
+                  <mat-icon class="mr-2" [ngClass]="{
+                    'badge-primary':item?.title == '', 
+                    'badge-verified':item?.title == 'Verified', 
+                    'badge-pending': item?.title == 'Pending',
+                    'badge-rejected': item?.title == 'Rejected'
+                    }">verified</mat-icon>
+            {{item?.title == ''?'All':item?.title | titlecase}}
+          </button>
+        </mat-menu>
+      </div>
+</div>
+
+
+<div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
+    No record found for {{profile == params.title?'':activeStatus | titlecase}} {{params.title | titlecase}}
+    <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+</div>
+<div class="form-group mb-3">
+    <input type="text" class="form-control search"
+    name="search" [(ngModel)]="searchterm"
+    (keyup)="searchName()"
+     placeholder="search by name">
+     <i class="fas fa-redo-alt reload text-app-primary f-18" (click)="reset()"></i>
+</div>
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
+<div class="example-container mat-elevation-z8 mb-5">
+    <mat-table [dataSource]="dataSource" matSort>
+        <!-- index column -->
+        <ng-container matColumnDef="index">
+        <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Name</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Name">
+                <span class=" text-app-primary name c_p"
+                matTooltipClass="tooltip-class" 
+                matTooltip="View {{params.title | titlecase}} Details"
+                (click)="openUser(row)"
+                [routerLink]="['/admin/users', row?.id]">
+                {{row?.name | titlecase}}
+                </span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Phone</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Phone">
+                {{row?.phone}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>email</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Email">
+                {{row?.email}}
+            </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>status</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Email">
+               <span [ngClass]="{
+                'verified':row?.verification_status == 'Verified', 
+                'pending': row?.verification_status == 'Pending',
+                'rejected': row?.verification_status == 'Rejected'
+                }">
+                   <mat-icon>verified</mat-icon>
+                   {{row?.verification_status}}
+               </span> 
+            </mat-cell>
+        </ng-container>
+        <!-- action Column -->
+        <!-- <ng-container matColumnDef="action" >
+        <mat-header-cell *matHeaderCellDef><i class="fas fa-ellipsis-h"></i></mat-header-cell>
+            <mat-cell  *matCellDef="let row"  data-label="action">
+                <mat-icon class="text-pp-primary c_p"  matTooltip="Click to View details"
+                 >launch</mat-icon>
+            </mat-cell>
+        </ng-container> -->
+
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+    </mat-table>
+    <div style="position: relative">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+    </div>
+
+</div>

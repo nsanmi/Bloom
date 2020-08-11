@@ -1,0 +1,27 @@
+
+.mat-cell{
+    font-size: 14px;
+}
+.mat-header-cell:nth-child(4),.mat-cell:nth-child(4){
+  flex:25% !important;
+}
+.mat-header-cell:nth-child(2),.mat-cell:nth-child(2),
+.mat-header-cell:nth-child(5),.mat-cell:nth-child(5){
+    flex: 15% !important;
+}
+.mat-header-cell:nth-child(3),.mat-cell:nth-child(3){
+    flex: 20% !important;
+}
+.mat-header-cell:first-child,.mat-cell:first-child{
+    flex: 10% !important;
+}
+.mat-header-cell:nth-child(6),.mat-cell:nth-child(6){
+    flex: 15% !important;
+}
+.mat-footer-row, .mat-header-row, .mat-row{
+    background: #fff;
+    margin-bottom: 0.3rem;
+    border-radius: 4px;
+    padding: 10px 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
+}

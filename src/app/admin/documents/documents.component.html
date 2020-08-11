@@ -1,0 +1,76 @@
+<div class="intro mb-4 row">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Driver's Licences</p>
+        <p class="f-24 mb-0">{{params.title | titlecase}} Driver's Licences</p>
+    </div>
+    <div class="tags col-md-6">
+        <div>
+          <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'All' && error == false}"
+            (click)="filterLicense('All')">All
+          </span>
+          <span class="tag mx-0 mx-md-3" 
+            [ngClass]="{'activeTag': params.title == 'Verified' && error == false}"
+            (click)="filterLicense('Verified')">Verified
+          </span>
+          <span class="tag mr-2" 
+            [ngClass]="{'activeTag': params.title == 'Pending' && error == false}"
+            (click)="filterLicense('Pending')">Pending
+          </span>
+          <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'Rejected' && error == false}"
+            (click)="filterLicense('Rejected')">Rejected
+          </span>
+        </div>
+    </div>
+</div>
+<div class="text-center text-app-primary py-5" *ngIf="dataLoader == true">
+    <i class="fas fa-circle-notch fa-4x fa-spin"></i> <br>
+    <span>loading...</span>
+</div>
+<div class="text-center text-app-primary p-5 f-24" *ngIf="licenses.length == 0 && dataLoader == false">
+    No Record found for {{params.title | titlecase}} Driver's License
+    <span class="ml-3 f-w6 f-18 c_p text-app-secondary" (click)="getLicences()">Retry</span>
+    <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+</div>
+<div class="form-group mb-3">
+    <input type="text" class="form-control search"
+    name="search" [(ngModel)]="searchterm"
+    (keyup)="searchName()"
+     placeholder="search by driver's name">
+     <i class="fas fa-redo-alt reload text-app-primary f-18" (click)="reset()"></i>
+</div>
+<div class="content">
+    <div class="doc-item mb-3 bg-app-light" *ngFor="let item of licenses | paginate: { itemsPerPage: 12, currentPage: p }">
+        <img [src]="item?.driver_photo"  alt="Driver's profile picture"
+        onerror="this.src='../../../assets/img/default.png'">
+        <div class="w-100 ml-2">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="text-app-primary mb-0 c_p"
+                [routerLink]="['/admin/users', item?.user_id]">
+                {{item?.driver_name}}
+                </h6>
+                <span class="c_p view f-12 text-app-primary" 
+                (click)="view(item)">View License
+                </span>
+            </div>
+            <h6 class="text-app-dark mb-0">{{item?.driver_phone}}</h6>
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="text-app-dark mb-0 d-flex">
+                    License Status
+                </h6>
+                <span class="ml-2" [ngClass]="{
+                    'verified':item?.license_status == 'Verified', 
+                    'pending': item?.license_status == 'Pending',
+                    'rejected': item?.license_status == 'Rejected'
+                    }">
+                    <mat-icon>check_circle_outline</mat-icon>
+                    {{item?.license_status}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end w-100">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+</div>

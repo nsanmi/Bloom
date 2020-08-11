@@ -1,0 +1,115 @@
+<div class="intro mb-4 row">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Subscriptions</p>
+        <p class="f-24 mb-0">{{params.title | titlecase}} Subscriptions</p>
+    </div>
+    <div class="tags col-md-6">
+        <div>
+            <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'all' && error == false}"
+            (click)="filterSub('all')">All
+          </span>
+          <span class="tag mx-0 mx-md-3" 
+            [ngClass]="{'activeTag': params.title == 'active' && error == false}"
+            (click)="filterSub('active')">Active
+          </span>
+          <span class="tag" 
+            [ngClass]="{'activeTag': params.title == 'inactive' && error == false}"
+            (click)="filterSub('inactive')">Inactive
+          </span>
+        </div>
+    </div>
+</div>
+
+
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
+<div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
+    {{params.title | titlecase}} Subscription list is empty 
+    <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+</div>
+<div class="example-container mat-elevation-z8 mb-5">
+    <mat-table [dataSource]="dataSource" matSort>
+        <!-- index column -->
+        <ng-container matColumnDef="index">
+        <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="package">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Package</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Package">
+               <span class=" text-app-primary name c_p">{{row?.package_name}}</span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Amount</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Amount">
+                {{row?.price_paid}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="payment">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>
+                 <span>Mode of Payment</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Mode of Payment">
+                {{row?.mode_of_payment}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="created_at">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+            <span>Created At</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label=">Expires At">
+                {{row?.created_at | date:'fullDate'}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="expires_at">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+            <span>Expires At</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label=">Expires At">
+                {{row?.expires_at}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="is_active">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Status</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Status">
+               <span [ngClass]="{
+                'verified':row?.is_active == true, 
+                'pending': row?.is_active == false
+                }">
+                   <mat-icon>check_circle_outline</mat-icon>
+                   {{row?.is_active == true?'Active':'Inactive'}}
+               </span> 
+            </mat-cell>
+        </ng-container>
+        <!-- action Column -->
+        <ng-container matColumnDef="action" >
+        <mat-header-cell *matHeaderCellDef><i class="fas fa-ellipsis-h"></i></mat-header-cell>
+            <mat-cell  *matCellDef="let row"  data-label="Action">
+                <mat-icon class="text-app-primary c_p mr-2"
+                    matTooltipClass="tooltip-class"
+                    matTooltip="Click to View User Details"
+                    [routerLink]="['/admin/users', row?.user_id]"
+                    >
+                    launch
+                </mat-icon>
+                <mat-icon class="text-app-danger c_p"
+                    matTooltipClass="tooltip-red"
+                    matTooltip="Delete user subscription"
+                    (click)="delete(row)">
+                    delete_forever
+                </mat-icon>
+            </mat-cell>
+        </ng-container>
+
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+    </mat-table>
+    <div style="position: relative">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+    </div>
+
+</div>

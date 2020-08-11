@@ -1,0 +1,100 @@
+<div class="intro mb-4 row">
+    <div class="col-md-6">
+        <p class="f-14 mb-0">Dashboard - Titans</p>
+        <p class="f-24 mb-0">{{ryderType | titlecase }} Ryders</p>
+    </div>
+    <div class="tags col-md-6">
+        <div>
+          <span class="tag" 
+            [ngClass]="{'activeTag': ryderType == 'all' && error == false}"
+            (click)="ryderType = 'all';">All
+          </span>
+          <span class="tag mx-0 mx-md-3" 
+            [ngClass]="{'activeTag': ryderType == 'active' && error == false}"
+            (click)="ryderType = 'active';">Active
+          </span>
+          <span class="tag mx-0 mr-md-3" 
+            [ngClass]="{'activeTag': ryderType == 'pending' && error == false}"
+            (click)="ryderType = 'pending';">Pending
+          </span>
+          <span class="tag" 
+            [ngClass]="{'activeTag': ryderType == 'deactivated' && error == false}"
+            (click)="ryderType = 'deactivated'">Deactivated
+          </span>
+        </div>
+    </div>
+</div>
+
+
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
+<div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
+    Ryders list is empty <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+</div>
+<div class="example-container mat-elevation-z8 mb-5" >
+    <mat-table [dataSource]="dataSource" matSort>
+        <!-- index column -->
+        <ng-container matColumnDef="index">
+        <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Name</span>
+                </mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Name">
+               <span class=" text-app-primary name c_p">{{row?.name}}</span>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Phone</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Phone">
+                {{row?.phone}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>email</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Email">
+                {{row?.email}}
+            </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="license">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
+                <span>Vehicle/Licence no:</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label=">Bike/Licence no">
+                {{row?.license}}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>status</span></mat-header-cell>
+            <mat-cell *matCellDef="let row" data-label="Email">
+               <span [ngClass]="{
+                'verified':row?.status == 'active', 
+                'pending': row?.status == 'pending',
+                'deactivated': row?.status == 'deactivated'
+                }">
+                   <mat-icon>verified</mat-icon>
+                   {{row?.status}}
+               </span> 
+            </mat-cell>
+        </ng-container>
+        <!-- action Column -->
+        <!-- <ng-container matColumnDef="action" >
+        <mat-header-cell *matHeaderCellDef><i class="fas fa-ellipsis-h"></i></mat-header-cell>
+            <mat-cell  *matCellDef="let row"  data-label="action">
+                <mat-icon class="text-pp-primary c_p"  matTooltip="Click to View details"
+                 >launch</mat-icon>
+            </mat-cell>
+        </ng-container> -->
+
+        
+        <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+
+    </mat-table>
+    <div style="position: relative">
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20,50, 100]"></mat-paginator>
+    </div>
+
+</div>

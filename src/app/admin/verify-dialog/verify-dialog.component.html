@@ -1,0 +1,18 @@
+<mat-dialog-content class="py-4 px-4">
+    <div class="text-center">
+        <mat-icon class="text-app-green f-34">help_outline</mat-icon>
+        <h6 class="text-app-primary py-4 f-24">
+            Are you sure you want to {{dialogData?.action}} <br> {{dialogData?.title}}
+        </h6>
+    </div>
+    <div class="text-center">
+        <button class="btn bg-app-danger mr-3" [ngClass]="{'ban': loader == true}"
+        [disabled]="loader == true" (click)="decline()">
+            Decline
+        </button>
+        <button class="btn bg-app-green" [ngClass]="{'ban': loader == true}"
+        [disabled]="loader == true" (click)="confirm()">
+            Confirm <i class="fas fa-spinner fa-spin ml-3" *ngIf="loader"></i>
+        </button>
+    </div>
+</mat-dialog-content>

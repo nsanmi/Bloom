@@ -1,0 +1,28 @@
+<h6 class="head-text">{{dialogData.action}} Subscription Package
+    <i class="fas fa-times float-right" (click)="close()"></i>
+</h6>
+<mat-dialog-content>
+    <form  class="row px-5 py-2 card" #myForm="ngForm">
+        <div class="row">
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.title" name="title" placeholder="Package Title" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.price" name="price" placeholder="Package Price" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.discount" name="dscount" placeholder="Package Discount" >
+        </mat-form-field>
+        <mat-form-field class="mb-2 col-12" >
+            <input matInput [(ngModel)]="data.duration" name="duration" placeholder="Package Duration" >
+        </mat-form-field>
+        </div>
+        <div class="text-center">
+            <button class="btn bg-app-primary" [ngClass]="{'ban': loader == true}"
+                [disabled]="loader == true" (click)="createPackge()">
+                {{dialogData.action == 'Create'?'Submit':'Save Changes'}}
+                <i class="fas fa-spinner fa-spin ml-3" *ngIf="loader"></i>
+            </button>
+        </div>
+    </form>
+</mat-dialog-content>
