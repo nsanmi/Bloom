@@ -40,6 +40,8 @@ export class LicenseDetailsComponent implements OnInit {
   async decline() {
     try{
       this.loaderDecline = true
+      this.data.user_id = this.dialogData.user_id;
+      console.log('am callerd here now: ', this.data)
       let res:any = await this.crud.declineLicence(this.data);
       this.alert.success(res.message)
       this.dialogRef.close({event:'close', data:res})
