@@ -31,6 +31,7 @@ export class TripsComponent implements OnInit {
   status = ''
   success = false;
   role: boolean;
+  searchterm: String = "";
   public displayedColumns = ['index', 'destination', 'pickup', 'budget', 'date', 'status', 'action'];
   public dataSource = new MatTableDataSource<any>();
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -88,5 +89,18 @@ export class TripsComponent implements OnInit {
   filterTrips(val) {
     this.trip = val;
     this.users(val);
+  }
+
+  searchName(){
+    let trip: any[] = this.dataSource.data
+    const filteredTrips = trip.filter(item => {
+      return item.destination.toLowerCase().includes(this.searchterm.toLowerCase().trim()) || item.pick_up.toLowerCase().includes(this.searchterm.toLowerCase().trim())
+    })
+    this.dataSource.data = filteredTrips;
+    this.util.storeTripList(filteredTrips);
+  }
+  reset(){
+      this.searchterm = '';
+      this.users(this.trip)
   }
 }

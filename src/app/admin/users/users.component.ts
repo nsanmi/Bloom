@@ -5,6 +5,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { CrudService } from 'src/app/service/crud.service';
 import { AlertService } from 'ngx-alerts';
 import { UtilService } from 'src/app/service/util.service';
+import { FormControl } from '@angular/forms';
+import {MatDatepicker} from '@angular/material/datepicker';
+import * as _moment from 'moment';
+import { Moment} from 'moment';
 
 @Component({
   selector: 'app-users',
@@ -37,6 +41,8 @@ export class UsersComponent implements OnInit {
   role: boolean;
   searchterm = '';
   count = 0;
+  date = new FormControl();
+  // date = new FormControl(moment());
   profile = 'Updated Profile Image';
   public displayedColumns = ['index', 'name', 'phone', 'email', 'status'];
   public dataSource = new MatTableDataSource<any>();
@@ -78,7 +84,19 @@ export class UsersComponent implements OnInit {
       let updated = res.data.filter(el => {
         return el.avatar_status == 1;
       })
+      console.log(res.data.length)
+      console.log('Users found => ', res.data);
       this.count = updated.length;
+      //sort the array in descending order;
+      res.data.sort((item1, item2) => {
+        if(new Date(item2.created_at) > new Date(item1.created_at)){
+          return 1;
+        }
+        else if(new Date(item2.created_at) < new Date(item1.created_at)){
+          return -1;
+        }
+        return 0
+      })
       this.dataSource.data = filter as any[];
       this.userBank = res.data;
       this.tableLoader = false;
@@ -128,5 +146,19 @@ export class UsersComponent implements OnInit {
   }
   openUser(user) {
     this.util.setUserInfo(user);
+  }
+  
+
+  chosenYearHandler(normalizedYear: Moment) {
+    const ctrlValue = this.date.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date.setValue(ctrlValue);
+  }
+
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date.setValue(ctrlValue);
+    datepicker.close();
   }
 }

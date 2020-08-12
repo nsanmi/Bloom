@@ -25,8 +25,18 @@ export class CrudService {
     return this.http.get(getUrl)
       .toPromise();
   }
+  getInterstateTripsPending(){
+    let getUrl = this.tripUrl + `all/rider/pending/intratrips`
+    return this.http.get(getUrl)
+      .toPromise();
+  }
   getIntraTrips() {
     let getUrl = this.tripUrl + `intrastate/trip`
+    return this.http.get(getUrl)
+      .toPromise();
+  }
+  getIntraTipsPending(){
+    let getUrl = this.tripUrl + `all/rider/pending/intratrips`
     return this.http.get(getUrl)
       .toPromise();
   }

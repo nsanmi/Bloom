@@ -44,7 +44,7 @@
             </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Destination">
                 <span class="text-app-primary name c_p">
-                    {{row?.destination || 'Unavailable'}}, {{row?.destination_landmark}}
+                    {{row?.destination || 'Unavailable'}}, {{row?.destinationLandmark}}
                 </span>
             </mat-cell>
         </ng-container>
@@ -54,7 +54,7 @@
             </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Pickup">
                 <span class="text-app-primary name c_p">
-                    {{row?.pick_up | titlecase}}, {{row?.pick_up_landmark}}
+                    {{row?.pickup | titlecase}}, {{row?.pickupLandmark}}
                 </span>
             </mat-cell>
         </ng-container>

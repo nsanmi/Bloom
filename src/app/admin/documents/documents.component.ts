@@ -74,7 +74,7 @@ export class DocumentsComponent implements OnInit {
   }
   filter(val){
     let filter = this.licenseBank.filter(el=>{
-      return  el.status == val;
+      return  el.license_status == val;
     })
     this.licenses = filter;
   }

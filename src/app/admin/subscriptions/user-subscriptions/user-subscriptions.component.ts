@@ -7,6 +7,10 @@ import { AlertService } from 'ngx-alerts';
 import { CrudService } from 'src/app/service/crud.service';
 import { DeleteDialogComponent } from '../../delete-dialog/delete-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import {MatDatepicker} from '@angular/material/datepicker';
+import * as _moment from 'moment';
+import { Moment} from 'moment';
 
 @Component({
   selector: 'app-user-subscriptions',
@@ -25,10 +29,19 @@ export class UserSubscriptionsComponent implements OnInit {
   role:boolean;
   params = {title:'all',is_active:true};
   subBank = [];
+  searchterm = '';
+  searchDate:any;
+  activeStatus = '';
   public displayedColumns = [
   'index', 'package', 'amount','payment','created_at',
   'expires_at', 'is_active', 'action'
   ];
+  statusFilters: object[] = [
+    { title: '', status: 0 },
+    { title: 'Basic', status: 1 },
+  ]
+  date = new FormControl();
+  formControl = new FormControl()
   public dataSource = new MatTableDataSource<any>();
   @ViewChild(MatSort, { static: false }) sort: MatSort;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -86,6 +99,14 @@ export class UserSubscriptionsComponent implements OnInit {
       this.filter(false)
     }
   }
+  async filterRole() {
+    this.searchterm = '';
+    //this.params = {...this.params, ...val}
+    this.filterUsers();
+  }
+  filterUsers() {
+    
+  }
   filter(val){
     let filter = this.subBank.filter(el=>{
       return  el.is_active == val;
@@ -103,6 +124,44 @@ export class UserSubscriptionsComponent implements OnInit {
         this.subscriptions();
       }   
     });
+  }
+  chosenYearHandler(normalizedYear: Moment) {
+    const ctrlValue = this.date.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date.setValue(ctrlValue);
+  }
+
+  chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date.setValue(ctrlValue);
+    datepicker.close();
+  }
+
+  chosenDate(event){
+    console.log(event)
+  }
+  dateRangeSelected(){
+    // console.log('called here now')
+    // console.log(this.searchDate)
+    // console.log(this.searchDate.start.toDate())
+    const startDate = new Date(this.searchDate.start.toDate())
+    const endDate = new Date(this.searchDate.end.toDate())
+    const users: any[] = this.dataSource.data;
+    const filtered: any[] = users.filter((item) => {
+      if(new Date(item.created_at) >= startDate && new Date(item.created_at) <= endDate){
+        return true;
+      }
+      return false;
+    })
+    this.dataSource.data = filtered;
+    this.util.storeSubscriptionList(filtered)
+  }
+  async resetUserlist(){
+    this.searchDate = '';
+    await this.subscriptions()
+
+    this.filterSub(this.params.title)
   }
 }
 

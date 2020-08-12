@@ -713,3 +713,20 @@ select{
       padding-left: 0;
   }
 }
+
+.cdk-overlay-pane{
+  background-color: #fff !important;
+  td.start-date{
+      background-color: red;
+  }
+  
+  td.in-range{ background-color: red;}
+  
+  td.in-range{
+      background-color: red;
+  }
+  
+  td.active{
+  
+  }
+}

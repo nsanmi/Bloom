@@ -11,6 +11,7 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { UsersComponent } from './users/users.component';
 import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.component';
 import { VehiclesComponent } from './vehicles/vehicles.component';
+import { PendingTripsComponent } from './pending-trips/pendingtrips.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,11 @@ const routes: Routes = [
         path: "trips",
         component: TripsComponent,
         data: { title: "Trips | Dashboard" },
+      },
+      {
+        path: "pending-trips",
+        component: PendingTripsComponent,
+        data: {title: 'Pending-Trips | Dashboard'}
       },
       {
         path: "users/:id",

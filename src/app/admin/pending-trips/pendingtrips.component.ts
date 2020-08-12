@@ -7,9 +7,9 @@ import { AlertService } from 'ngx-alerts';
 import { UtilService } from 'src/app/service/util.service';
 
 @Component({
-  selector: 'app-trips',
-  templateUrl: './trips.component.html',
-  styleUrls: ['./trips.component.scss']
+  selector: 'app-pendingtrips',
+  templateUrl: './pendingtrips.component.html',
+  styleUrls: ['./pendingtrips.component.scss']
 })
 export class PendingTripsComponent implements OnInit {
   trip = 'intra';
@@ -17,8 +17,7 @@ export class PendingTripsComponent implements OnInit {
   tableLoader = false;
   trips = [
     { title: 'Intrastate Trips', key: 'intra' },
-    { title: 'Interstate trips', key: 'inter' },
-    { title: 'Charter Trips', key: 'charter' }
+    { title: 'Interstate trips', key: 'inter' }
   ]
   statusFilters = [
     'all',
@@ -59,10 +58,11 @@ export class PendingTripsComponent implements OnInit {
       let res: any;
       this.success = false;
       if (val == 'intra') {
-        res = await this.crud.getIntraTrips();
+        res = await this.crud.getIntraTipsPending();
+        console.log(res)
       }
       if (val == 'inter') {
-        res = await this.crud.getInterstateTrips();
+        res = await this.crud.getInterstateTripsPending();
       }
       if (val == 'charter') {
         res = await this.crud.getChatterTrips();

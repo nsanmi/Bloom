@@ -26,7 +26,7 @@ export class NavigationComponent implements OnInit {
     { path: 'subscriptions', icon: 'card_membership', title: 'User Subscriptions' },
     { path: 'vehicles', icon: 'local_taxi', title: 'Vehicles' },
     { path: 'trips', icon: 'edit_road', title: 'Trips' },
-    { path: 'pendingtrips', icon: 'edit_road', title: 'Pending-Trips' },
+    { path: 'pending-trips', icon: 'edit_road', title: 'Pending-Trips' },
     { path: 'documents', icon: 'description', title: 'Drivers Documents' },
     { path: 'otp', icon: 'vpn_key', title: 'OTP Verifications' },
     { path: 'packages', icon: 'card_travel', title: 'Packages' },

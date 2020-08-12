@@ -28,6 +28,13 @@
     <br>
     <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
 </div>
+<div class="form-group mb-3">
+    <input type="text" class="form-control search"
+    name="search" [(ngModel)]="searchterm"
+    (keyup)="searchName()"
+     placeholder="search by destination or pickup">
+     <i class="fas fa-redo-alt reload text-app-primary f-18" (click)="reset()"></i>
+</div>
 <div class="example-container mat-elevation-z8 mb-5">
     <mat-table [dataSource]="dataSource" matSort>
         <!-- index column -->

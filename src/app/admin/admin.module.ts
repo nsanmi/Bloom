@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -37,6 +38,10 @@ import { VehicleDetailsComponent } from './vehicle-details/vehicle-details.compo
 import { VehiclesComponent } from './vehicles/vehicles.component';
 import { VerifyDialogComponent } from './verify-dialog/verify-dialog.component';
 import { VerifyDocumentsComponent } from './verify-documents/verify-documents.component';
+import { PendingTripsComponent } from './pending-trips/pendingtrips.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule } from 'saturn-datepicker'
 
 @NgModule({
   declarations: [
@@ -63,6 +68,7 @@ import { VerifyDocumentsComponent } from './verify-documents/verify-documents.co
     OtpComponent,
     EditVehicleComponent,
     TripsComponent,
+    PendingTripsComponent,
     SendOtpComponent
   ],
   imports: [
@@ -80,7 +86,11 @@ import { VerifyDocumentsComponent } from './verify-documents/verify-documents.co
     FormsModule, 
     ReactiveFormsModule,
     NgxPaginationModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxDaterangepickerMd.forRoot(),
+    SatDatepickerModule
   ]
 })
 export class AdminModule { }

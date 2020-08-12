@@ -12,6 +12,9 @@ import { NotfoundComponent } from './core/notfound/notfound.component';
 import { ResetPaaswordComponent } from './core/reset-paasword/reset-paasword.component';
 import { UnauthorizedComponent } from './core/unauthorized/unauthorized.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule } from 'saturn-datepicker'
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter'
+
 
 @NgModule({
   declarations: [
@@ -30,13 +33,16 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
     HttpClientModule,
     ReactiveFormsModule,
     AlertModule.forRoot({maxMessages: 5, timeout: 3000, position: 'right'}),
+    SatDatepickerModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpinterceptorService,
       multi: true
-    }
+    },
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
   bootstrap: [AppComponent]
 })
