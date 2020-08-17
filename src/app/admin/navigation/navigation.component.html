@@ -40,18 +40,20 @@
                     alt=""> <br>
                     <span class="f-14">{{user?.name || 'Admin'}}</span>
                 </div>
-                <div *ngIf="changeMenu == false">
-                    <a class="links" mat-list-item *ngFor="let item of adminMenu" 
+                <div class="w-100" *ngIf="changeMenu == false">
+                    <a class="links d-flex w-100" mat-list-item *ngFor="let item of adminMenu" 
                         [routerLink]="[item.path]" routerLinkActive="active_link" >
                         <mat-icon class="icon">{{item.icon}}</mat-icon>
-                        <span class="ml-2">{{item.title}}</span>
+                        <span class="ml-2 d-flex flex-grow-1">{{item.title}}</span>
+                        <span *ngIf="item.title != 'Dashboard'" class="badge bg-app-primary text-white ml-2">{{0}}</span>
                     </a>
                 </div>
-                <div *ngIf="changeMenu == true">
-                    <a class="links" mat-list-item *ngFor="let item of adminMenu" 
+                <div class="w-100" *ngIf="changeMenu == true">
+                    <a class="links d-flex w-100" mat-list-item *ngFor="let item of adminMenu" 
                         [routerLink]="[item.path]" routerLinkActive="active_link" (click)="opened = !opened">
                         <mat-icon class="icon">{{item.icon}}</mat-icon>
-                        <span class="ml-2">{{item.title}}</span>
+                        <span class="ml-2 d-flex flex-grow-1">{{item.title}}</span>
+                        <span *ngIf="item.title != 'Dashboard'" class="badge bg-app-primary text-white ml-2">{{0}}</span>
                     </a>
                 </div>
             </mat-nav-list>

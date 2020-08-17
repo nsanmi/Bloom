@@ -41,6 +41,8 @@ export class UsersComponent implements OnInit {
   role: boolean;
   searchterm = '';
   count = 0;
+  searchDate = ''as any;
+  formControl = new FormControl()
   date = new FormControl();
   // date = new FormControl(moment());
   profile = 'Updated Profile Image';
@@ -161,4 +163,28 @@ export class UsersComponent implements OnInit {
     this.date.setValue(ctrlValue);
     datepicker.close();
   }
+  async resetUserlist(){
+    this.searchDate = '';
+    this.users()
+    // await this.subscriptions()
+
+    // this.filterSub(this.params.title)
+  }
+  dateRangeSelected(){
+    // console.log('called here now')
+    // console.log(this.searchDate)
+    // console.log(this.searchDate.start.toDate())
+    const startDate = new Date(this.searchDate.start.toDate())
+    const endDate = new Date(this.searchDate.end.toDate())
+    const users: any[] = this.dataSource.data;
+    const filtered: any[] = users.filter((item) => {
+      if(new Date(item.created_at) >= startDate && new Date(item.created_at) <= endDate){
+        return true;
+      }
+      return false;
+    })
+    this.dataSource.data = filtered;
+    this.util.storeUserList(filtered)
+  }
+
 }

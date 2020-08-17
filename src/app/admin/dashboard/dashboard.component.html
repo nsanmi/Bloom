@@ -35,7 +35,7 @@
             </div>
             <div class="row">
                 <h6 class="col-7 f-12">Deactivated</h6>
-                <h6 class="col-5 f-w6 f-16">10</h6>
+                <h6 class="col-5 f-w6 f-16">0</h6>
             </div>
         </div>
     </div>
@@ -72,8 +72,9 @@
         </div>
     </div>
 </div>
+<mat-progress-bar mode="query" color="warn" *ngIf="dataLoader"></mat-progress-bar>
 <div class="chart bg-app-light">
-    <h6 class="mb-3 text-app-dark f-16 f-w6">User Registration Report</h6>
+    <h6 class="mb-3 text-app-dark f-16 f-w6">User Weekly Registration Report</h6>
     <canvas baseChart
         [datasets]="reports.chartData"
         [labels]="reports.chartLabels"

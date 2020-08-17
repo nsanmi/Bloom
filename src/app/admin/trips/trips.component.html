@@ -1,57 +1,103 @@
 <div class="intro mb-4 row">
-    <div class="col-md-6">
-        <p class="f-14 mb-0">Dashboard - Users</p>
-        <p class="f-24 mb-0">{{status | titlecase}} {{trip | titlecase}} Trips</p>
+    <div class="col-md-4 mb-3 mb-md-0">
+        <p class="f-14 mb-0">Dashboard - Trips</p>
+        <p class="f-24 mb-0">{{params.title | titlecase}} {{trip | titlecase}} Trips</p>
     </div>
-    <!-- <div class="tags col-md-6">
-        <div>
-          <span class="tag mr-2" *ngFor="let item of statusFilters"
-            [ngClass]="{'activeTag': status == item && success == true}"
-            (click)="filterTripStatus(item)">{{item}}
-          </span>
+    <div class="col-md-8">
+        <div class="action_box">
+            <h6 class="button text-app-primary c_p d-flex align-items-center"
+                (click)="toggleFilter()">
+                <span> Sort By Date 
+                    <small>
+                    ( {{daysParams == 'custom'?filterOptions.startDateString 
+                    + ' - ' + filterOptions.endDateString:daysParams}} )
+                    </small> 
+                </span>
+                <mat-icon class="ml-2" *ngIf="!filterBox">keyboard_arrow_down</mat-icon>
+                <mat-icon class="ml-2" *ngIf="filterBox">keyboard_arrow_up</mat-icon>
+            </h6> <br>
+            
+            <div class="filter_panel" *ngIf="filterBox">
+                <p class="text-app-primary">Sort By Date</p>
+                <div class="filter_items mb-4">
+                    <span class="badge mr-2" *ngFor="let item of days"
+                    [ngClass]="{'bg-app-primary': daysParams == item}" 
+                    (click)="selectDate(item)">{{item | titlecase}}</span>
+                </div>
+                <p class="text-app-primary">Custom Date</p>
+                <div class="custom">
+                    <div class="text-center mr-2">
+                        <span class="action_btn border_btn" 
+                        (click)="picker1.open()">Start Date</span> <br>
+                        <span class="text-app-black f-14">{{startDate | date}}</span>
+                    </div>
+                    <div class="text-center mr-2">
+                        <span class="action_btn border_btn"
+                        (click)="picker2.open()" >End Date</span> <br>
+                        <span class="text-app-black f-14">{{endDate | date}}</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="action_btn bg-app-primary" 
+                        (click)="applyFilter()">Apply Date</span>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <mat-form-field class="datepicker">
+                        <input matInput class="d-none" (dateChange)="getStartDate($event)" [matDatepicker]="picker1" placeholder="Choose a date">
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field class="datepicker">
+                        <input matInput class="d-none" (dateChange)="getEndDate($event)" [matDatepicker]="picker2" placeholder="Choose a date">
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
-    </div> -->
+        <div class="tags">
+            <span class="tag mr-2" *ngFor="let item of statusOptions"
+                    [ngClass]="{'activeTag': params.title == item && success == true}"
+                    (click)="filterTripStatus(item)">{{item | titlecase}}
+                </span>
+        </div>
+    </div>
 </div>
 <div class="intro mb-4 d-flex justify-content-between filter">
     <div class="tags">
         <div>
-            <span class="tag mr-3" *ngFor="let item of trips" [ngClass]="{'activeTag': item?.key == trip && success == true}" (click)="filterTrips(item?.key)">{{item?.title}}
-            </span>
+          <span class="tag mr-3" *ngFor="let item of trips"
+            [ngClass]="{'activeTag': item?.key == trip && success == true}"
+            (click)="filterTrips(item?.key)">{{item?.title}}
+          </span>
         </div>
     </div>
 </div>
 
-
-<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
 <div class="text-center text-app-primary p-5 f-24" *ngIf="dataSource.data.length == 0 && tableLoader == false">
-    {{trip | titlecase}} list is empty
-    <br>
-    <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
+    No {{trip | titlecase}} trips record found
+    <br> <mat-icon class="text-app-yellow f-48">folder_open</mat-icon>
 </div>
 <div class="form-group mb-3">
     <input type="text" class="form-control search"
     name="search" [(ngModel)]="searchterm"
     (keyup)="searchName()"
-     placeholder="search by destination or pickup">
+     placeholder="search by pick-up or destination">
      <i class="fas fa-redo-alt reload text-app-primary f-18" (click)="reset()"></i>
 </div>
+<mat-progress-bar mode="query" color="warn" *ngIf="tableLoader"></mat-progress-bar>
 <div class="example-container mat-elevation-z8 mb-5">
     <mat-table [dataSource]="dataSource" matSort>
         <!-- index column -->
         <ng-container matColumnDef="index">
-            <mat-header-cell *matHeaderCellDef>
-                <span>S/N</span>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
+        <mat-header-cell *matHeaderCellDef><span>S/N</span> </mat-header-cell>
+        <mat-cell *matCellDef="let row; let i = index;" data-label="S/N">{{i+control}}</mat-cell>
         </ng-container>
         <!-- name Column -->
         <ng-container matColumnDef="destination">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-                <span>Destination</span>
-            </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>Destination</span>
+                </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Destination">
                 <span class="text-app-primary name c_p">
-                    {{row?.destination || 'Unavailable'}}, {{row?.destination_landmark}}
+                {{row?.destination || 'Unavailable'}}, {{row?.destination_landmark}}
                 </span>
             </mat-cell>
         </ng-container>
@@ -61,12 +107,12 @@
             </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Pickup">
                 <span class="text-app-primary name c_p">
-                    {{row?.pick_up | titlecase}}, {{row?.pick_up_landmark}}
+                {{row?.pick_up | titlecase}}, {{row?.pick_up_landmark}}
                 </span>
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="budget">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 <span>Budget</span>
             </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Budget">
@@ -74,7 +120,7 @@
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="date">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> 
                 <span>Date</span>
             </mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Date">
@@ -82,36 +128,39 @@
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>
-                <span>status</span>
-            </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header> <span>status</span></mat-header-cell>
             <mat-cell *matCellDef="let row" data-label="Email">
-                <span [ngClass]="{
+               <span [ngClass]="{
                 'verified':row?.trip_status == 'completed',
                 'started': row?.trip_status == 'accepted' 
                 || row?.trip_status == 'started',
                 'pending': row?.trip_status == 'pending',
                 'rejected': row?.trip_status == 'cancelled'
                 }">
-                    <mat-icon>verified</mat-icon>
-                    {{row?.trip_status}}
-                </span>
+                   <mat-icon>verified</mat-icon>
+                   {{row?.trip_status}}
+               </span> 
             </mat-cell>
         </ng-container>
         <!-- action Column -->
-        <ng-container matColumnDef="action">
-            <mat-header-cell *matHeaderCellDef>
-                <i class="fas fa-ellipsis-h"></i>
-            </mat-header-cell>
-            <mat-cell *matCellDef="let row" data-label="action">
-                <mat-icon class="text-app-tertiary c_p mr-2" matTooltipClass="tooltip-tertiary" matTooltip="Click to View Rider's details"
-                    [routerLink]="['/admin/users', row?.rider_id]">launch</mat-icon>
-                <mat-icon class="text-app-primary c_p" matTooltipClass="tooltip-class" matTooltip="Click to View Driver's details" [routerLink]="['/admin/users', row?.driver_id]">launch</mat-icon>
-
+        <ng-container matColumnDef="action" >
+        <mat-header-cell *matHeaderCellDef><i class="fas fa-ellipsis-h"></i></mat-header-cell>
+            <mat-cell  *matCellDef="let row"  data-label="action">
+                <mat-icon class="text-app-tertiary c_p mr-2"
+                matTooltipClass="tooltip-tertiary" 
+                matTooltip="Click to View Rider's details"
+                [routerLink]="['/admin/users', row?.rider_id]"
+                 >launch</mat-icon>
+                <mat-icon class="text-app-primary c_p"
+                matTooltipClass="tooltip-class" 
+                matTooltip="Click to View Driver's details"
+                [routerLink]="['/admin/users', row?.driver_id]"
+                 >launch</mat-icon>
+                
             </mat-cell>
         </ng-container>
 
-
+        
         <mat-header-row *matHeaderRowDef="displayedColumns; let i = index"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;">
         </mat-row>

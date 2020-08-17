@@ -7,6 +7,7 @@ import { CrudService } from 'src/app/service/crud.service';
 import { UtilService } from 'src/app/service/util.service';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { SendOtpComponent } from '../send-otp/send-otp.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-otp',
@@ -28,6 +29,8 @@ export class OtpComponent implements OnInit {
   data = {admin_id:''};
   params = {title:'All'};
   status = 'All';
+  searchDate = '' as any;
+  formControl = new FormControl();
   public displayedColumns = [
   'index', 'otp', 'phone','date','status','action'
   ]
@@ -113,6 +116,29 @@ export class OtpComponent implements OnInit {
     let dialogRef = this.matDialog.open(SendOtpComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
     });
+  }
+  async resetUserlist(){
+    this.searchDate = '';
+    this.otp()
+    // await this.subscriptions()
+
+    // this.filterSub(this.params.title)
+  }
+  dateRangeSelected(){
+    // console.log('called here now')
+    // console.log(this.searchDate)
+    // console.log(this.searchDate.start.toDate())
+    const startDate = new Date(this.searchDate.start.toDate())
+    const endDate = new Date(this.searchDate.end.toDate())
+    const users: any[] = this.dataSource.data;
+    const filtered: any[] = users.filter((item) => {
+      if(new Date(item.created_at) >= startDate && new Date(item.created_at) <= endDate){
+        return true;
+      }
+      return false;
+    })
+    this.dataSource.data = filtered;
+    this.util.storeOTPList(filtered)
   }
 }
 
