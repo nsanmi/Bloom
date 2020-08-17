@@ -77,6 +77,7 @@ export class CrudService {
   }
   getUsersCount() {
     let getUrl = this.userUrl + 'count/user';
+    console.log(getUrl)
     return this.http.get(getUrl)
       .toPromise()
   }

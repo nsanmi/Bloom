@@ -1,3 +1,4 @@
+import { UtilService } from 'src/app/service/util.service';
 import { CrudService } from 'src/app/service/crud.service';
 import { AlertService } from 'ngx-alerts';
 import { Component, OnInit } from '@angular/core';
@@ -30,12 +31,11 @@ export class DashboardComponent implements OnInit {
   }
   }
   reports = {
-    chartLabels : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Aug','Sept','Oct','Nov','Dec'],
+    chartLabels : ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sat'],
     chartType : 'line',
     chartLegend : true,
     chartData : [
-      {data: [100,450,230,290,350,400,0,0,0,0,0,0], label: 'Month', backgroundColor:'transparent'},
-      //{data: [], label: 'Other cases', backgroundColor: '#32658B'}
+      {data: [], label: 'Ryders', borderColor: '#36A2EB', backgroundColor:'transparent'},
     ]
   }
   dataLoader = false;
@@ -61,20 +61,32 @@ export class DashboardComponent implements OnInit {
   constructor(
     private alert: AlertService,
     private crud: CrudService,
+    private util: UtilService
   ) { }
 
   ngOnInit(): void {
     this.userAnalytics();
     this.vehicleAnalytics()
     this.subAnalytics();
+    this.util.userList.subscribe(res=>{
+      if(res){
+        this.getGraphData(res)
+      }
+      else{
+        this.users();
+      }
+    })
   }
   async userAnalytics() {
     try {
+      console.log('called here now')
       this.dataLoader = true;
       let uCount: any = await this.crud.getUsersCount();
+      console.log('users count', uCount)
       this.userCount = {...this.userCount, ...uCount}
       this.dataLoader = false;
     } catch (err) {
+      console.log(err)
       this.dataLoader = false;
     }
   }
@@ -97,5 +109,24 @@ export class DashboardComponent implements OnInit {
     } catch (err) {
       this.dataLoader = false;
     }
+  }
+  async users() {
+    try {
+      this.dataLoader = true;
+      let res: any = await this.crud.getAllRegisteredUser();
+      this.util.storeUserList(res.data);
+    } catch (err) {
+      this.dataLoader = false;
+    }
+  }
+  async getGraphData(res){
+    let dates = await this.util.getAllDatesOfCurrentWeek();
+    dates.forEach(element => {
+      let stats = res.filter(d => 
+        {let time = new Date(d.created_at).getTime();
+          return (element.start <= time && time <= element.end);
+      })
+      this.reports.chartData[0].data.push(stats.length);
+    });
   }
 }

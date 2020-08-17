@@ -59,6 +59,17 @@ export class UtilService {
   storePackageList(data){
     this.packageSubject.next(data);
   }
+  async getYesterdayMidnight(){
+    let date = new Date();
+    date.setHours(-24,0,0,0);
+    date.setHours(23,59,0,0)
+    return date.getTime();
+  }
+  async getTodayMidnight(){
+    let date = new Date();
+    date.setHours(23,59,0,0);
+    return date.getTime();
+  }
   storeSubscriptionList(data){
     this.subscriptionSubject.next(data);
   }
